@@ -1,0 +1,314 @@
+import os
+
+file_path = "database_setup.sql"
+
+# Check if file exists before deleting
+if os.path.exists(file_path):
+    os.remove(file_path)
+    print(f"✅ File '{file_path}' has been deleted.")
+else:
+    print(f"❌ File '{file_path}' not found.")
+##########################################################
+
+1. Reverse a string in Python
+def reverse_string(s):
+    return s[::-1]
+print(reverse_string("hello"))
+
+###############################################################
+2. Check if a number is a palindrome
+def is_palindrome(n):
+    return str(n) == str(n)[::-1]
+print(is_palindrome(121))
+
+################################################################
+3. Find the factorial of a number
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial(n - 1)
+print(factorial(5)) 
+
+###################################################################
+4. Find the largest element in a list
+
+def find_largest(lst):
+    return max(lst)
+print(find_largest([1, 4, 9, 2]))  
+
+##################################################################
+5. Count vowels in a string
+def count_vowels(s):
+    vowels = 'aeiouAEIOU'
+    return sum(1 for char in s if char in vowels)
+print(count_vowels("hello world"))
+
+###################################################################
+6.Remove duplicates from a list
+def remove_duplicates(lst):
+    return list(set(lst))
+print(remove_duplicates([1, 2, 2, 3, 4, 4]))
+
+##################################################################
+7.Check if a string is an anagram
+def is_anagram(s1, s2):
+    return sorted(s1) == sorted(s2)
+print(is_anagram("listen", "silent"))
+####################################################################
+8.Sum of all elements in a list
+def sum_of_list(lst):
+    return sum(lst)
+print(sum_of_list([1, 2, 3, 4])) 
+
+####################################################################
+9.Find the second largest number in a list
+def second_largest(lst):
+    unique = list(set(lst))
+    unique.sort()
+    return unique[-2]
+print(second_largest([1, 2, 3, 4, 4]))
+
+########################################################################
+10.Swap two variables without using a third variable
+
+a, b = 10, 20
+a, b = b, a
+print(a, b)
+########################################################################
+11.Python Function to Check for Prime Number
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, n):
+        if n % i == 0:
+            return False
+    return True
+
+# Example usage
+num = 29
+if is_prime(num):
+    print(f"{num} is a prime number.")
+else:
+    print(f"{num} is not a prime number.")
+
+#############################################################################
+12.Palindrome check
+
+text="madam"
+if text == text[::-1]:
+    print("Palindrome")
+else:
+    print("NOt")
+##############################################################################
+13,Leap year Checking
+
+def is_leap_year(year):
+    if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+        return True
+    else:
+        return False
+year = int(input("Enter a year: "))
+if is_leap_year(year):
+    print(f"{year} is a leap year.")
+else:
+    print(f"{year} is not a leap year.")
+###############################################################################
+14.Anagram Check in Python
+
+def is_anagram(str1, str2):
+    return sorted(str1.lower()) == sorted(str2.lower())
+
+print(is_anagram("listen", "silent"))   
+print(is_anagram("hello", "world")
+
+###################################################################################
+15.Armstrong Number check
+def is_armstrong(num):
+    power = len(str(num))
+    return num == sum(int(digit) ** power for digit in str(num))
+
+print(is_armstrong(153))  
+print(is_armstrong(9474))  
+print(is_armstrong(123))
+####################################################################################
+16.Fibonacci series range
+n=int(input())
+a,b=0,1
+for _ in range(n):
+    print(a,end=" ")
+    a,b=b,a+b
+##############################################################################
+17.Nth fibonacci number
+
+def fibonacci(n):
+    if n <= 0:
+        return "Invalid input"
+    elif n == 1:
+        return 0
+    elif n == 2:
+        return 1
+
+    a, b = 0, 1
+    for _ in range(2, n):
+        a, b = b, a + b
+    return b
+
+# Example usage
+n = int(input("Enter n: "))
+print(f"The {n}th Fibonacci number is {fibonacci(n)}")
+
+##################################################################################
+#Find the First Non-Repeating Character in a String
+
+def first_non_repeating_char(s):
+    from collections import Counter
+    counts = Counter(s)
+    
+    for char in s:
+        if counts[char] == 1:
+            return char
+    return None
+
+print(first_non_repeating_char("aabbcddeff"))  # Output: 'c'
+
+############################################################
+Check if Two Strings are Anagrams
+
+def are_anagrams(s1, s2):
+    return sorted(s1) == sorted(s2)
+
+print(are_anagrams("listen", "silent"))
+
+#################################################################
+Find Duplicates in a List (Without Extra Space)
+
+def find_duplicates(nums):
+    nums.sort()
+    duplicates = []
+    for i in range(1, len(nums)):
+        if nums[i] == nums[i-1]:
+            duplicates.append(nums[i])
+    return duplicates
+
+print(find_duplicates([4,3,2,7,8,2,3,1]))  
+
+#################################################################
+
+P=100
+R=1
+T=2
+principle=0
+total_intrest= 0
+for y in range(1,T+1):
+  simple_intrest=(P*1*R)/100
+  total_intrest += simple_intrest
+  principle += P
+print(total_intrest)
+print(principle)
+
+######################################################################
+
+my_list=[1,2,3,4]
+highest=second_highest=my_list[0]
+#second_highest=my_list[0]
+for num in my_list:
+  if num > highest:
+      a=c
+      a=b
+  elif num > second_highest and num != highest:
+    second_highest=num
+
+
+if highest == second_highest
+print("highest num:",highest)
+
+#########################################################################
+
+P=100
+R=5
+T=2
+simple_intrest=(P*T*R)/100
+print(simple_intrest)
+#A=(P*(1+R/100) ** T)-P
+
+#print(A)
+
+############################################################################
+
+P = 1000   
+R = 2     
+years_paid=10  
+total_years=15
+extra_years=total_years-years_paid
+principle = 0
+total_amount_10 = 0
+
+for i in range(1, years_paid+1):
+    T = total_years - i + 1
+    A = P * ((1 + R / 100) ** T)
+    total_amount_10 += A
+    principle += P
+compound_interest_10 = total_amount_10 - principle
+
+print(compound_interest_10)
+print(principle)
+print(total_amount_10)
+
+total_amount_15=total_amount_10*((1+R/100)**extra_years)
+last_5_compound_intrest=total_amount_15-total_amount_10
+
+print(last_5_compound_intrest)
+print(total_amount_15)
+
+simple_intrest_5=(total_amount_10*extra_years*R)/100
+total_amount_15_simple=total_amount_10 + simple_intrest_5
+
+print(simple_intrest_5)
+print(total_amount_15_simple)
+
+################################################################
+def calculate_compound_interest_10(P, R, years_paid, total_years):
+    principle = 0
+    total_amount_10 = 0
+
+    for i in range(1, years_paid + 1):
+        T = total_years - i + 1
+        A = P * ((1 + R / 100) ** T)
+        total_amount_10 += A
+        principle += P
+
+    compound_interest_10 = total_amount_10 - principle
+    return compound_interest_10, principle, total_amount_10
+def calculate_after_extra_years(total_amount_10, R, extra_years):
+    total_amount_15 = total_amount_10 * ((1 + R / 100) ** extra_years)
+    last_5_compound_interest = total_amount_15 - total_amount_10
+    return last_5_compound_interest, total_amount_15
+
+
+def calculate_simple_interest_5(total_amount_10, R, extra_years):
+    simple_interest_5 = (total_amount_10 * extra_years * R) / 100
+    total_amount_15_simple = total_amount_10 + simple_interest_5
+    return simple_interest_5, total_amount_15_simple
+
+P = 1000
+R = 2
+years_paid = 10
+total_years = 15
+extra_years = total_years - years_paid
+
+
+ci_10, principal, amount_10 = calculate_compound_interest_10(P, R, years_paid, total_years)
+last_5_ci, amount_15 = calculate_after_extra_years(amount_10, R, extra_years)
+si_5, amount_15_simple = calculate_simple_interest_5(amount_10, R, extra_years)
+
+print(ci_10)
+print(principal)
+print(amount_10)
+
+print(last_5_ci)
+print(amount_15)
+
+print(si_5)
+print(amount_15_simple)
+####################################################################
