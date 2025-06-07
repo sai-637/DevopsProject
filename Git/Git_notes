@@ -6,7 +6,10 @@ or any other digital content. Developed by Linus Torvalds in 2005, Git is widely
 collaborate with others, and maintain a record of all modifications made to a project. 
 It allows developers to create branches, merge code, and resolve conflicts, making it an essential tool for collaborative software development.
 Git is available on multiple platforms and is often used in conjunction with other tools, such as GitHub and GitLab.git
+HEAD
 ########################################################################################################################
+#######################################################################################################################
+5cabc73 (Add files via upload)
 reflog 
 
 The git reflog command is a powerful tool in Git that displays a record of all commits, including changes to branches and remote references.
