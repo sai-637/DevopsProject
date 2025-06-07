@@ -1,0 +1,26 @@
+Jenkins is an open source continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool written in the Java programming language
+Jenkins is a popular open-source automation server written in Java. It is widely used for building, testing, and deploying software projects. 
+Jenkins provides a web-based interface for creating and managing pipelines, automating tasks, and integrating with various tools and services. 
+It supports a wide range of plugins for various programming languages, frameworks, and services, making it a versatile and flexible choice for continuous integration and continuous deployment (CI/CD) pipelines.
+Jenkins is known for its ease of use, scalability, and customization capabilities, making it a popular choice among developers and DevOps teams.
+ It's highly popular in DevOps practices due to its flexibility and powerful plugin ecosystem, which integrates with tools like Git, Maven, Docker, Kubernetes, and many others.
+
+When the developer commits the code to the source code repositorythe jenkins server detects the changes that have occured in the source code repository.
+Jenkins will detect and pull the changes and will start preparing for a new build.
+If build get failed ,developer will communicated about the failure of the build so that they can check the code at their end.
+If the build get successfull ,jenkins will deploy the build in test server.
+Jenkins will continue to check source code repository for any changes make in source code and keep on repeating the entire process.
+
+
+how do you take backup of the jenkins server
+
+To take a backup of a Jenkins server, you can use the following methods:
+
+Jenkins Backup Plugin: Install the Jenkins Backup Plugin on your server, which allows you to schedule automatic backups of your Jenkins configuration, jobs, and other data.
+Export Jenkins Configuration: Use the Jenkins CLI (Command-Line Interface) to export your Jenkins configuration as a file using the jenkins export command.
+Jenkins API: Use the Jenkins API to create a backup of your server by making a GET request to the /backup endpoint.
+Manual Backup: Manually copy the Jenkins home directory and all its contents to a safe location, such as an external hard drive or cloud storage
+
+
+
+
