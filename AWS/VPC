@@ -1,0 +1,147 @@
+A VPC, short for Virtual Private Cloud, is a virtual network dedicated to your AWS account. 
+It is a virtual version of a traditional network, logically isolated from other virtual networks in the same AWS account. 
+A VPC allows you to launch AWS resources, such as EC2 instances, RDS databases, and S3 buckets, in a virtual environment 
+that is separate from other AWS accounts or other VPCs. You can configure your VPC's IP address range, subnets, and routing to meet your specific network requirements. 
+VPCs are highly secure, scalable, and offer a high degree of customization.
+
+It allows you to define your own networking topology, including your own IP address range, subnets, and routers. 
+VPCs can span across multiple Availability Zones (AZs) and regions. You can launch AWS resources, such as EC2 instances, RDS databases,
+and S3 buckets, into a VPC. VPCs provide a secure and isolated environment, helping to meet your networking and security requirements.
+You can configure VPC settings, including security groups, network ACLs, and route tables, to manage traffic and access to your resources.
+
+
+
+
+
+
+VPC (Virtual Private Cloud) is an essential AWS feature that enables customers to establish virtual networks within the cloud. 
+VPC protects and isolates EC2 instances, databases and load balancers while protecting from attack by outside forces such as hackers.
+
+
+
+once we create vpc, automatically aws creates one route table ,default security group and one network ACL(Access control list).
+Then we need to create subnets and Internet gateway .
+then attach internet gateway to the vpc
+next our subnets are associted with main default route table then go to Route there is only one target local 
+when we launch our all instances are used to communicate each other by using local
+then we create public route table and private route table,so we can add our public subnets to public route table and
+add private subnets to private route table and we should select auto assign public ip to our public subnets.
+then enable DNS hostnames to our vpc and create flow in cloudwatch ,cloudwatch is easy to see the logs.
+After that we should create IAM policy for permission for flow flow logs role policy.
+then create a role ,select EC2 and give permission for policy and create.
+then edit trust policy to change ec2 to vpc flow logs.
+then go to cloudwatch and creeate one log group then go back to flow logs and edit destination log group here we should give log group name.
+then create flow log and then launch one instance in private subnet and launch one instance in public subnet in our vpc.
+then connect our instance to server by using RDP in windows or Linux in putty
+
+########################################
+route table:
+
+A route table is a fundamental component in Amazon Web Services (AWS) that helps to determine the routing of network traffic within a VPC.
+It is a set of rules that define where network traffic destined for a particular destination should be routed. 
+Each route table is associated with a specific VPC, and it can be used by multiple subnets within that VPC. 
+You can create, modify, and manage route tables in the AWS Management Console, AWS CLI, or AWS SDKs.
+Route tables can be used to route traffic between subnets, to the Internet, or to directly to another VPC.
+###########################################
+
+subnet:
+
+In Amazon Web Services (AWS), a subnet is a range of IP addresses within a VPC (Virtual Private Cloud). 
+It's a logically isolated section of the VPC's IPv4 or IPv6 address space. 
+Subnets can be used to organize and segment resources within a VPC, aiding in network management and security. 
+You can create multiple subnets in a VPC, each with its own set of IP addresses and routing configuration. 
+Subnets can be associated with Availability Zones (AZs) to ensure high availability and redundancy for your applications.
+##########################################
+
+internet gateway:
+
+An Amazon Web Services (AWS) Internet Gateway is a virtual device that provides access to and from the AWS cloud. 
+A gateway connects your VPC to another network. For example, use an internet gateway to connect your VPC to the internet.
+It serves as a single entry and exit point for internet traffic to and from a VPC (Virtual Private Cloud) or a subnet.
+The Internet Gateway enables communication between AWS resources and the internet, as well as between AWS resources and other networks.
+It acts as a router, filtering and directing traffic based on route tables and network ACLs. 
+This ensures secure and controlled access to your AWS resources from the internet.
+
+###################################################
+
+endpoints:
+Use a VPC endpoint to connect to AWS services privately, without the use of an internet gateway or NAT device.
+
+####################################################
+
+Peering connections
+Use a VPC peering connection to route traffic between the resources in two VPCs.
+
+##################################################
+
+Traffic Mirroring
+Copy network traffic from network interfaces and send it to security and monitoring appliances for deep packet inspection.
+
+#################################################
+
+Transit gateways
+Use a transit gateway, which acts as a central hub, to route traffic between your VPCs, VPN connections, and AWS Direct Connect connections.
+
+###############################################
+
+VPC Flow Logs
+A flow log captures information about the IP traffic going to and from network interfaces in your VPC.
+#################################################
+
+VPN connections
+Connect your VPCs to your on-premises networks using AWS Virtual Private Network (AWS VPN).
+
+###############################################
+Difference between public subnet and private subnet:
+
+In Amazon Web Services (AWS), public subnets and private subnets are two types of subnets that help organize IP addresses and define the accessibility of resources. 
+Public subnets are connected to the internet and allow inbound traffic, whereas private subnets are not directly accessible from the internet and only enable communication within the VPC or VPN.
+Public subnets are suitable for hosting public-facing applications, while private subnets are ideal for hosting backend services, databases, and internal applications.
+Both public and private subnets can coexist in the same Virtual Private Cloud (VPC) to create a secure and isolated network architecture.
+
+#######################################################
+
+
+network access control list in aws
+
+A Network Access Control List (NACL) in AWS is a set of access controls that filters traffic to and from the subnets. 
+It provides an additional layer of security by allowing you to define standards and rules for inbound and outbound traffic. 
+NACLs are particularly useful for controlling traffic between subnets, servers, and applications in a VPC. 
+You can create custom NACLs to permit or deny specific traffic based on source and destination IP addresses, ports, and protocols. 
+AWS provides a default NACL for each subnet, and you can also create custom NACLs to meet specific security requirements.
+
+############################################################
+
+security groups in vpc aws
+
+Security Groups (SGs) are a crucial network security feature in Amazon Virtual Private Cloud (VPC) AWS. 
+An SG acts as a virtual firewall that regulates inbound and outbound traffic to and from instances within a VPC.
+You can create security groups to allow or deny specific traffic based on IP addresses, port numbers, and protocols. 
+SGs are associated with instances and can be used to implement network access control, restrict traffic to and from instances, 
+and prevent unauthorized access. This helps maintain the security and integrity of your AWS resources.
+
+##################################################
+
+isolated vpc
+
+An isolated VPC (Virtual Private Cloud) is a type of VPC that is not directly reachable from the internet and is not peered with other VPCs. 
+Isolated VPCs are ideal for sensitive workloads that require maximum security and isolation. They can only be accessed through launch configurations or peered with other VPCs. 
+Isolated VPCs are also known as "private" or "invisible" VPCs.
+They provide an additional layer of security and segregation for your resources, making them more secure and difficult to access without proper authorization.
+
+########################################################
+
+Elastic IP (EIP) is a static public IP address in Amazon Web Services (AWS). 
+It allows you to mask the failure of an instance or instance replacement by providing a fixed public IP address that remains even if the underlying instance changes.
+EIPs are useful for DNS associations, load balancers, and applications that rely on static IP addresses. 
+You can associate an EIP with any instance in your account, and reassign it to a different instance if the first instance is terminated or interrupted. 
+This provides flexibility and reliability for your AWS-based applications.
+
+############################################################
+
+
+
+
+
+
+

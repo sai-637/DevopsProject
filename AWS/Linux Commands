@@ -1,0 +1,308 @@
+ls -  list directories and files 
+List all entries, including hidden files (those starting with a dot)
+         ls -a
+ print sizes in human-readable format (e.g., KB, MB).
+          ls -lh
+Use a long listing format, showing detailed information about each file or directory.
+          ls -l
+to see permission of each file
+         ls -al
+The ls -lrt command is a combination of options used with ls to list files and directories in a specific format:
+
+-l: Long listing format, which provides detailed information about each file or directory, including permissions, number of links, owner, group, size, and modification date.
+
+-r: Reverse the order of the sort, so that the output is displayed in reverse order.
+
+-h: Human-readable. Prints file sizes in a human-readable format (e.g., KB, MB, GB) instead of bytes.
+
+-t: Sort by modification time, with the most recently modified files appearing first.
+                ls -lrt
+
+pwd - display present working directory command in Linux
+
+cd - Linux command to change to directories
+
+mkdir - Command used to create directories in linux
+
+rm-To remove files or directories
+      rm file.txt
+      rmdir directory name
+      rm -r dirname --->delete dir and its files or subdirs
+
+cp- copy our files to another folders
+    cp file1.txt path(/root)
+
+mv --->move or rename to our files
+    mv file1.txt path
+    mv file1.txt file2.txt -->rename
+
+touch --->it will create new file
+
+chmod
+ChatGPT said:
+ChatGPT
+The chmod command in Linux is used to change the permissions of files and directories. 
+Permissions determine who can read, write, or execute a file or directory.
+
+      chmod 777 file.txt ---> every one can access
+      chmod 755 file.txt --->Set read, write, and execute for the owner; read and execute for the group; and read only for others:
+      chmod u+x file.txt --->Give the owner execute permission
+           Each digit is the sum of the permissions:
+
+7 (4+2+1) = rwx
+6 (4+2) = rw-
+5 (4+1) = r-x
+4 (4) = r--
+3 (2+1) = -wx
+2 (2) = -w-
+1 (1) = --x
+0 (0) = ---
+
+
+he chown command in Linux is used to change the ownership of files and directories. 
+This command allows you to modify both the user (owner) and the group associated with a file or directory.
+       chown username file.txt--->change owner of a file
+       chown username /path/to/directory---> change owner of a dir
+
+
+
+ln-used to combine two files
+
+clear-clear the display
+
+cat -display the file content,it will append the data 
+ cat >> sai.txt then we can add data to existing file then we should use ctrl+D to save and exit file
+
+echo-print the text
+
+less-used to view (but not modify) the contents of a file or output from another command.
+
+man-this command gives detailed documentation about all the commands in linux
+
+uname:displays basic info about os
+whoami-display current username(directory)
+tar- It bundles multiple files into a single file without compressing them by default.
+tar -cvf archive.tar file1 file2 saidir/
+-c: Create a new archive.
+-v: Verbose mode; list files processed.
+-f: Specify the archive file name.
+
+tar -xvf archive.tar --extract files from archive,The extract operation refers to the process of unpacking or decompressing files from an archive. 
+zip-
+in Linux is used to create and manage ZIP archives. 
+ZIP archives are widely used for compressing and bundling multiple files and directories into a single file. 
+so we can easy to store, share, and transfer groups of files.
+
+zip archive.zip file1
+
+grep-search for a string irrespective of case sensitive
+     grep -i sai sai.txt
+    -i --ignore case sensive 
+
+head -returns specified number of lines from the top 
+       head -n 20 file.txt
+
+tail-returns specified number of lines from the below
+      tail -n 20 file.txt
+
+The diff command in Unix/Linux is used to compare the contents of two files line by line. 
+It outputs the differences between the files, which can help identify changes, additions, or deletions. 
+The diff command is commonly used in software development, configuration management, and text processing.
+           diff -u file1.txt file2.txt
+
+The cmp command in Unix/Linux is used to compare two files byte by byte. 
+It is typically used to determine whether two files are identical. 
+Unlike the diff command, which focuses on line-by-line textual differences, cmp is lower-level and reports differences starting from the first mismatched byte.
+         cmp [options] file1 file2
+
+The comm command in Unix/Linux is used to compare two sorted files line by line.
+It outputs three columns of information, representing lines unique to each file and lines common to both files.
+This command is useful when working with sorted lists and needing to find differences or similarities between them.
+           comm [options] file1 file2
+
+The sort command in Unix/Linux is used to sort lines of text files or input data.
+It arranges the lines in a specified order, typically alphabetically or numerically,
+and can handle various sorting requirements based on the options provided.
+            sort -n num.txt ----> asc order to numbers
+            sort -r file.txt ----> reverse the order
+
+The export command in Unix/Linux is used to set environment variables or make shell variables available to subprocesses.
+When a variable is "exported," it becomes part of the environment for child processes spawned from the shell,
+making it accessible to any program or script that runs in that shell session.
+         export my_var="sai"
+         echo $my_var -->we can see output here
+
+The unzip command in Unix/Linux is used to extract the contents of a ZIP archive. 
+ZIP files are a popular format for compressing and packaging files, and the unzip command allows you to access the files inside.
+         unzip archive.zip
+
+The ssh command in Unix/Linux is used to securely connect to a remote system or server over a network using the Secure Shell (SSH) protocol. 
+It allows you to log into another machine, execute commands remotely, transfer files, and even create secure tunnels for other types of network traffic.
+       ssh username@192.168.1.10
+To connect to a remote server with the username username at the IP address 192.168.1.10:
+
+The scp (Secure Copy) command in Linux is used to securely transfer files
+and directories between a local host and a remote host, or between two remote hosts.
+It uses SSH (Secure Shell) for data transfer and provides the same level of security and authentication as SSH.
+       scp file.txt username@remotehost:path
+
+The service command in Unix/Linux is used to manage services (also known as daemons) on the system.
+It provides a way to start, stop, restart, and check the status of services. 
+The service command is commonly used on older init-based systems like SysVinit, 
+but it's also supported on systems using the newer systemd init system for compatibility.
+
+     service serviceName action
+
+On newer systems that use systemd, the service command is often replaced by systemctl.
+While service can still be used for compatibility, systemctl is more powerful and provides more detailed control over services.
+
+    sudo systemctl start nginx
+
+journalctl ----> used to view logs
+       journalctl --since "YYYY-MM-DD HH:MM:SS" --until "YYYY-MM-DD HH:MM:SS"
+dig ---> used to get DNS server info
+     dig www.google.com
+
+nslookup --->used to get DNS servor info in short form
+     nslookup www.google.com
+
+curl ---> used to download the files from server,curl is used in secure websites
+           curl -I https://example.com
+           curl -O https://example.com/file.txt---> download a file
+
+-o filename: Write the output to a file instead of standard output.
+-O: Save the file with the same name as in the URL.
+-L: Follow redirects.
+-I: Fetch only the HTTP headers.
+-X: Specify a custom request method (e.g., GET, POST, PUT, DELETE).
+-d data: Send data in a POST request.
+-H: Add a custom header to the request.
+-u username:password: Use basic authentication.
+-k: Allow insecure connections (ignore SSL certificate errors).
+-F: Submit a form with multipart/form-data.
+-s: Silent mode (no progress bar or error messages).
+--data-urlencode: URL-encode the data before sending in a POST request.
+
+wget ---> is used in all websites
+      wget -r https://example.com/ --->download entire website recursively
+      wget  https://example.com/file.txt
+
+
+
+The sed (stream editor) command in Linux is a versatile tool used for parsing and transforming text in a file or input stream. 
+It allows you to perform a wide range of text manipulation tasks, such as finding and replacing text, deleting lines, and inserting or appending text
+              sed s/oldtext/newtext filename
+              sed '3d' filename ---> delete 3rd line in the file
+
+chown ---> It is used to change file/directory ownership
+           sudo chown newowner oldfile
+            sudo chown root sai.txt
+
+df --->disk free
+
+du ---> disk usage
+
+traceroute/ping -----> It is a network troubleshooting /This is useful for diagnosing network issues, checking connectivity, and understanding the route data takes across the network
+
+The mount command in Linux is used to attach a filesystem to a specified directory,
+making the filesystem accessible within the directory tree. 
+It’s commonly used to mount storage devices, network filesystems, and other types of filesystems. 
+           mount filepath attach dir
+           mount /root/sourcedir/file /root 
+           umount /mnt --->detach file system
+
+
+To list all current environment variables
+       env
+Run a Command with Modified Environment Variables
+       env my_var="sai"
+Used to set or modify environment variables 
+       export my_var="sai
+to remove an environment variable
+
+      unset my_var
+uniq ---> it will give unique names inthe files
+     sort sai.txt | uniq
+
+The find command in Linux is a powerful tool used to search for files and directories within a directory hierarchy.
+It allows you to locate files based on various criteria like name, type, size, modification time, permissions, and more. 
+          find /var/log -name "*.log" ---> to find log files
+          find /root -name sai.txt ---> to find text files
+          find path -name file/dir/logname
+
+The awk command in Linux is a powerful text processing tool used to manipulate and analyze text files or streams of data.
+It allows you to perform tasks such as searching, extracting, formatting, and reporting data. 
+awk is particularly well-suited for working with structured text data like CSV files, logs.
+           awk '/error/ {print}' sai.txt ---> to print error word lines in a file
+           awk '{print $1}' sai.txt  ----> to print first word in every line
+           awk '{print $1,$2}' sai.txt ---> to print first and second line in a file
+           awk -F ',' '{print $1,$2}' sai.txt ---> it remove , and print values
+
+ps ---> it will show you running processess with thier PIDs
+     ps ---> show you all processess
+    pgrep process_name ---> find a process
+
+
+kill ---> by using PID we can terminate processess
+      kill -9 PID--> forcefully terminate
+      kill -STOP PID ---> stop a process
+      kill -CONT PID ---> resume
+    
+
+killall firefox ---> terminate all instance in a process
+
+killall -u username process_name --->terminate process with specific user
+     
+kill -l ---> display all signals
+ps -ef ---> all processes with more info
+The apt command is a command-line utility in Debian-based Linux distributions, such as Ubuntu, for managing software packages,installing softwares
+       sudo apt install package_name
+       sudo apt remove package_name ---> remove package 
+       sudo apt update --->update packages
+
+The sudo command in Linux stands for "superuser do." 
+It allows a permitted user to execute a command as the superuser (root) or another user, as specified by the security policy.
+The sudo command is essential for performing administrative tasks that require elevated privileges, such as installing software, modifying system files, or managing user accounts.
+          sudo su --> switch to current user to root
+
+The yum command is a package management tool used in Red Hat-based Linux distributions such as CentOS, Fedora, and RHEL (Red Hat Enterprise Linux).
+It stands for "Yellowdog Updater, Modified" and is used to manage software packages, including installing, updating, and removing packages. 
+yum resolves dependencies automatically, making it a powerful and user-friendly tool for managing software on these systems.
+        sudo yum install package_name
+
+The rpm command is a low-level package management tool used in Red Hat-based Linux distributions, such as CentOS, Fedora, and RHEL (Red Hat Enterprise Linux).
+It stands for "Red Hat Package Manager" and is used for installing, removing, querying, and verifying RPM (Red Hat Package Manager) packages. 
+Unlike yum or dnf, rpm does not handle dependencies automatically, so it is often used for 
+managing individual packages or performing operations not directly related to package dependencies.
+        sudo rpm -i package_name.rpm
+
+The whereis command in Linux is used to locate the binary, source, and manual page files for a command.
+It helps you quickly find where a command is installed and related files on the system.
+      whereis ls
+      whereis -b gcc ---> show binary executable files
+
+The whatis command in Linux provides a brief description of a command or program.
+      whatis ls
+      whatis root --> describe what type of file or dir
+
+The top command in Linux provides a dynamic, real-time view of the system's processes and resource usage.
+It displays information about CPU and memory usage, running processes, and other system metrics, 
+allowing users to monitor and manage system performance.
+    top
+
+passwd - Create or update passwords for existing users
+        passwd
+
+The useradd command is used to create a new user account on a Linux system.
+        sudo useradd -m username
+
+The usermod command is used to modify an existing user account.
+        sudo usermod -l newname oldname --->change username
+        sudo usermod -aG group1,group2 username ---> change the users primary group
+
+
+    
+
+
+
+

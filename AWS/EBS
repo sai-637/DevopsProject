@@ -1,0 +1,219 @@
+Elastic Block Store (EBS):
+#############################
+*Elastic Block Store (EBS) is a web service offered by Amazon Web Services (AWS) that provides block-level storage volumes for use with Amazon Elastic Compute Cloud (EC2) instances. 
+*EBS volumes are stored on the AWS storage infrastructure, and are designed to provide high levels of availability, durability, and performance.
+*EBS is suitable for applications that require high throughput, low latency, and high storage capacity. 
+*Some common use cases for EBS include database storage, file servers, and virtualized servers. 
+*EBS provides snapshotting and volume migration features, making it easier to manage and maintain data.
+*These volumes can be used to store data, including the operating system of the instance, 
+and persist independently from the life of the instance.
+
+1.Persistent Storage:
+
+EBS volumes persist independently of the life of the EC2 instance, ensuring that your data is retained even if the instance is stopped or terminated.
+
+2.Scalable and Flexible:
+
+Volumes can be resized, and you can increase their capacity, performance, or change their type with no downtime.
+
+3.Encryption:
+
+EBS volumes support encryption to protect your data at rest. Encryption is provided by AWS Key Management Service (KMS).
+
+4.High Availability and Durability:
+
+EBS volumes are designed for 99.999% availability and automatically replicate within an Availability Zone to protect against hardware failure.
+
+5.Snapshots:
+
+Create point-in-time snapshots of EBS volumes, which are stored in Amazon S3. Snapshots can be used to create new EBS volumes or to back up data.
+
+Types of Volumes:
+
+1.General Purpose SSD (gp3, gp2): Balanced price and performance for a wide variety of workloads.
+2.Provisioned IOPS SSD (io2, io1): High-performance SSDs designed for critical applications requiring sustained IOPS performance.
+3.Throughput Optimized HDD (st1): Low-cost HDD designed for frequently accessed, throughput-intensive workloads.
+4.Cold HDD (sc1): Lowest-cost HDD designed for less frequently accessed workloads.
+
+
+
+
+1. Creating an EBS Volume:
+Open the Amazon EC2 Console:
+
+Log in to the AWS Management Console and navigate to the EC2 Dashboard.
+Create Volume:
+
+In the left-hand navigation pane, click on Volumes under Elastic Block Store.
+Click the Create Volume button.
+Configure Volume:
+
+Select the volume type (e.g., gp2 for General Purpose SSD).
+Specify the size of the volume.
+Choose the Availability Zone where the volume will be created (must match the Availability Zone of the EC2 instance you want to attach it to).
+Configure additional settings such as encryption if needed.
+Click Create Volume.
+2. Attaching an EBS Volume to an EC2 Instance:
+Select Volume:
+
+In the Volumes section of the EC2 Dashboard, select the volume you created.
+Attach Volume:
+
+Click the Actions dropdown and select Attach Volume.
+Choose the instance to attach the volume to.
+Specify the device name (e.g., /dev/xvdf).
+Click Attach Volume.
+3. Making the Volume Available on the EC2 Instance:
+Connect to the Instance:
+
+SSH into the EC2 instance where the volume was attached.
+Format the Volume (if new):
+
+Create a filesystem on the volume (if it’s a new volume). For example, to format as ext4:
+sh:
+
+sudo mkfs -t ext4 /dev/xvdf
+Mount the Volume:
+
+Create a mount point and mount the volume:
+sh:
+
+sudo mkdir /mnt/myebs
+sudo mount /dev/xvdf /mnt/myebs
+Update /etc/fstab (Optional):
+
+To mount the volume automatically at boot, you can add an entry to the /etc/fstab file:
+sh:
+
+/dev/xvdf /mnt/myebs ext4 defaults,nofail 0 2
+4. Creating and Using EBS Snapshots:
+Create a Snapshot:
+
+In the Volumes section, select the volume.
+Click Actions and select Create Snapshot.
+Provide a description and click Create Snapshot.
+Restore from a Snapshot:
+
+In the Snapshots section, select the snapshot.
+Click Actions and select Create Volume from Snapshot.
+Configure the volume settings and click Create Volume.
+Best Practices for Using EBS:
+Regular Snapshots:
+
+Regularly create snapshots of your EBS volumes to ensure you have backups of your data.
+Monitor Performance:
+
+Use Amazon CloudWatch to monitor EBS metrics and adjust volume types or sizes based on performance needs.
+Use EBS-Optimized Instances:
+
+Consider using EBS-optimized EC2 instances to ensure dedicated throughput between EC2 and EBS.
+Encryption:
+
+Encrypt sensitive data stored on EBS volumes.
+Instance Store for Temporary Data:
+
+Use instance store volumes for temporary data that does not require persistence, 
+as they are faster and cheaper but do not survive instance stops and starts.
+
+
+
+
+commands:
+lsblk ---> to check volumes
+df -Th ---> to check volume size,use
+
+we should create volume in same availabilty zone of instance
+if you create a instance  then we can create volume
+
+The Yellowdog Updater Modified (YUM) is a free and open-source command-line package-management utility for 
+computers running the Linux operating system using the RPM Package Manager.
+
+#################################################
+
+EBS Snapshots:
+
+An EBS snapshot is a point-in-time copy of an Amazon Elastic Block Store (EBS) volume. 
+AWS snapshots are used to back up EBS volumes, allowing you to restore your data in case of data loss or corruption. 
+Snapshots can be taken manually or automatically, and are stored in Amazon S3. 
+You can create multiple snapshots of a single EBS volume, and have them stored for up to 30 days. 
+After this period, they'll be automatically deleted. Snapshots can also be used to create new EBS volumes, 
+allowing you to quickly spin up new resources.
+
+EBS snapshots are stored in S3 bucket,not our S3 bucket stored in Aws s3 bucket
+
+############################################
+
+What is the difference between EBS backup and snapshot?
+Snapshot: EBS snapshots are specific to EBS volumes and do not cover backups of other AWS services. 
+Backup: AWS Backup supports a wide range of AWS services, allowing you to manage backups for different resources through a single service.
+#############################################
+
+Can you encrypt an unencrypted EBS volume?
+You cannot directly encrypt existing unencrypted volumes or snapshots. 
+However, you can create encrypted volumes or snapshots from unencrypted volumes or snapshots. 
+If you enable encryption by default, Amazon EBS automatically encrypts new volumes and snapshots using your default KMS key for EBS encryption.
+################################################
+We cant share un encripted shapshots to another acount
+##################################################
+DLM:
+
+Automating with AWS Data Lifecycle Manager (DLM) allows you to manage the lifecycle of your AWS resources, 
+including Amazon S3 buckets, Amazon Elastic File System (EFS) file systems, and Amazon Elastic Block Store (EBS) volumes. 
+DLM enables you to automate the creation, rotation, and deletion of these resources, 
+while also enforcing compliance and security policies. This helps you maintain scalability, reduce manual errors, and improve overall resource management efficiency. 
+By automating these tasks, you can focus on higher-level tasks and ensure that your AWS resources are properly configured and managed.
+
+Policies:
+
+With Amazon Data Lifecycle Manager, you create policies to define your backup creation and retention requirements. These policies typically specify the following:
+
+Policy type — Defines the type of backup resources that the policy manages (snapshots or EBS-backed AMIs).
+
+Target resources — Defines the type of resources that are targeted by the policy (instances or EBS volumes).
+
+Creation frequency — Defines how often the policy runs and creates snapshots or AMIs.
+
+Retention threshold — Defines how long the policy retains snapshots or AMIs after creation.
+
+Additional actions — Defines additional actions that the policy should perform, such as cross-Region copying, archiving, or resource tagging.
+
+Amazon Data Lifecycle Manager offers default policies and custom policies.
+
+Default policies:
+
+Default policies back up all volumes and instances in a Region that do not have recent backups. 
+You can optionally exclude volumes and instances by specifying exclusion parameters.
+
+Custom policies
+Custom policies target specific resources based on their assigned tags and support advanced features, such as fast snapshot restore, snapshot archiving, cross-account copying, and pre and post scripts. A custom policy can include up to 4 schedules, where each schedule can have its own creation frequency, retention threshold, and advanced feature configuration.
+
+Amazon Data Lifecycle Manager supports the following custom policies:
+
+EBS snapshot policy — Targets volumes or instances and automates the creation, retention, and deletion of EBS snapshots.
+
+EBS-backed AMI policy — Targets instances and automates the creation, retention, and deregistration of EBS-backed AMIs.
+
+Cross-account copy event policy — Automates cross-Region copy actions for snapshots that are shared with you.
+
+###########################################################
+what is your ec2 instance backup strategy in aws:
+
+By using Tag we can filter the instances automatically,AWS Backup supports both instance-level backups as AMIs and volume-level backups as separate snapshots: 
+For a full backup of all EBS volumes on the instance, create an AMI of the EC2 instance running on Linux or Windows. 
+When you want to roll back, use the launch instance wizard to create an instance.
+
+Automated Snapshots:
+AWS Backup by using DLM: Use AWS Backup to automate the backup of your EBS volumes. AWS Backup allows you to create backup plans that specify when and how frequently backups should be created.
+Create a Backup Plan: Define the frequency (e.g., daily, weekly) and retention period.
+Assign Resources: Attach your EBS volumes to the backup plan.
+Manual Snapshots:
+Create Snapshots Manually: If you prefer more control, you can manually create snapshots of your EBS volumes using the AWS Management Console or AWS CLI.
+Console: Go to EC2 > Volumes, select the volume, and choose Create Snapshot.
+
+##################################################################3
+
+
+
+
+
+
