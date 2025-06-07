@@ -1,0 +1,104 @@
+Kubelet:
+
+The kubelet is a critical component of the Kubernetes ecosystem, responsible for managing and running containers on a machine. 
+It is a service that runs on every machine (node) in your cluster.
+
+Kubelet is a key component of Kubernetes that manages containers and nodes in a cluster: 
+Communication: Kubelet acts as a node-level agent that communicates between the Kubernetes control plane and individual nodes. 
+Container management: Kubelet is responsible for container execution, resource management, and monitoring container health. 
+Container lifecycle: Kubelet manages container lifecycles. 
+Node status: Kubelet reports back to the control plane about the node's status. 
+Pod management: Kubelet creates, destroys, or updates pods and their Docker containers. 
+Worker node registration: Kubelet is responsible for registering worker nodes in the Kubernetes cluster. 
+Discover Kubelet, and Why it's Important for Kubernetes ...
+Kubelet runs on each node of a cluster. It takes orders from the master node and transfers them to the worker nodes, which then execute the tasks.
+
+######################################################
+
+Etcd is a distributed key-value store that serves as a low-level storage mechanism for certain Kubernetes components, such as the cluster's state.
+It's used to store and manage cluster data, including node information, pod and service configurations, and persistent volume claims. 
+Etcd provides a consistent and fault-tolerant storage solution for Kubernetes, allowing it to scale and operate reliably in large, distributed environments. 
+It's a lightweight, flexible, and highly available solution that supports a wide range of data structures and makes it easy to store and retrieve cluster data.
+
+etcd role in Kubernetes
+The etcd stores all cluster information, such as its current state, desired state, configuration of resources, and runtime data.
+So DevOps can run single-node or multi-node clusters as etcd clusters, which interact with Kubernetes' etcd API to manage the clusters.
+
+In Kubernetes, etcd is a key-value store that manages configuration data, state data, and metadata for the cluster. 
+It's a critical component of the Kubernetes platform that ensures the system's reliability and consistency.
+etcd is responsible for storing and managing cluster state, including node identities, pod locations, and deployment configurations.
+
+###########################################################
+
+kubeadm in kubernetes
+
+Kubeadm is a tool used to set up and manage Kubernetes clusters. 
+Developed by the Kubernetes project, kubeadm provides a simple and efficient way to deploy and manage clusters, particularly for large-scale deployments. 
+With kubeadm, you can create a Kubernetes master node and join worker nodes to the cluster.
+It also helps to manage node roles, network policies, and SSL certificates. 
+Additionally, kubeadm supports various clustering scenarios, including HA (High Availability) and OpenShift deployments. 
+Its ease of use and flexibility make it a popular choice for setting up and managing Kubernetes clusters.
+
+###########################################################
+Difference between Docker and Containerd?
+
+Docker:
+Docker is a full containerization platform that simplifies the creation, management, and orchestration of containers.
+It includes a set of tools like the Docker CLI (Command-Line Interface), Docker Engine, and Docker Hub.
+Docker also handles building images, networking, volumes, and more. 
+It provides an end-to-end platform for developers to create and manage containers easily.
+
+containerd:
+containerd is a lower-level container runtime. It is responsible for the core operations of containers, such as starting, stopping, and managing container lifecycles.
+containerd is primarily focused on the container runtime aspect, and it does not include features for building container images or managing complex orchestration tasks.
+
+##############################################################
+
+Kube-Proxy is a network proxy that runs on each node in a Kubernetes cluster.
+It is responsible for maintaining network connectivity between services and pods. 
+Kube-Proxy does this by translating service definitions into actionable networking rules.
+
+Kube-proxy is a daemon that runs on each node in a Kubernetes cluster, responsible for making incoming traffic reach the desired service.
+It's a network proxy that sits between the userspace and the Linux network stack, intercepting and forwarding traffic to the service's pod. 
+Kube-proxy uses IPTables or IPVS (depending on the platform) to redirect traffic to the service.
+It also handles load balancing, circuit breaking, and other networking features.
+Kube-proxy is an essential component of Kubernetes, enabling communication between pods and services.
+
+Kube-proxy is a networking component in Kubernetes that manages traffic routing and communication between services and pods within a cluster
+
+####################################################################
+
+imperative
+The user is responsible for providing explicit instructions to Kubernetes on how to manage resources and applications.
+This method is useful for quick changes and ad-hoc management, but it can be error-prone and difficult to maintain.
+
+Declarative
+The system is responsible for automatically applying the desired state of the resources and applications to the cluster. 
+This method is generally preferable for production use cases because it enables version control, reviewable changes, and reproducibility.
+
+For example, using kubectl run is imperative, as you're explicitly telling Kubernetes to create a pod.
+In contrast, using a YAML file to describe a pod's configuration is declarative, as you're defining the desired state, and Kubernetes creates the pod accordingly.
+
+The imperative method is easy to use for ad-hoc operations, while the declarative approach promotes infrastructure-as-code and is better suited for production systems
+
+##########################################################
+
+The kubectl cordon command in Kubernetes is used to mark a node as unschedulable, meaning that no new pods can be scheduled on that node,
+but it does not affect the existing pods running on the node.
+This is useful when you want to prepare a node for maintenance (e.g., for upgrades or troubleshooting) but do not want to disrupt the currently running workloads.
+
+###############################################################
+
+The kubectl uncordon command is used in Kubernetes to mark a node as schedulable again after it has been drained or cordoned. 
+When a node is cordoned, it is marked as unschedulable, meaning no new pods can be scheduled on it. Once you’ve finished maintenance or updates (such as OS upgrades), 
+you can use the uncordon command to make the node available for scheduling again.
+
+###################################################################
+
+The kubectl drain command is used in Kubernetes to prepare a node for maintenance by safely evicting all running pods from the node.
+This command ensures that workloads are moved to other nodes in the cluster and the node is ready for upgrades, 
+configuration changes, or other administrative tasks.
+
+####################################################################
+
+

@@ -1,0 +1,98 @@
+A Namespace  is a logically portion of the cluster. 
+It provides a way to logically separate and organize resources such as Pods, Services, Deployments, and other Kubernetes objects. 
+This is especially useful for environments with multiple teams, projects, or applications running within the same Kubernetes cluster.
+Separate resources of different teams, projects, or environments (e.g., development, staging, production).
+Apply Role-Based Access Control (RBAC) policies to restrict users' access to specific namespaces.
+
+Using Namespace using YAML:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  namespace: my-namespace
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+
+
+controlplane $ kubectl get namespaces      
+NAME                 STATUS   AGE
+default              Active   15d
+kube-node-lease      Active   15d
+kube-public          Active   15d
+
+controlplane $ kubectl create namespace sainamespace
+namespace/sainamespace created
+controlplane $ kubectl get namespaces
+NAME                 STATUS   AGE
+default              Active   15d
+kube-node-lease      Active   15d
+kube-public          Active   15d
+sainamespace         Active   5s
+
+switch to another namespace:
+kubectl config set-context --current --namespace=my-namespace
+
+controlplane $ vi namespace.yml
+controlplane $ kubectl create -f namespace.yml
+pod/my-nginx-pod created
+controlplane $ kubectl get pods
+No resources found in default namespace.
+controlplane $ kubectl get pods -n sainamespace
+NAME           READY   STATUS    RESTARTS   AGE
+my-nginx-pod   1/1     Running   0          44s
+controlplane $ kubectl get all --all-namespaces
+NAMESPACE            NAME                                           READY   STATUS    RESTARTS      AGE
+kube-system          pod/calico-kube-controllers-75bdb5b75d-2b6mr   1/1     Running   1 (23m ago)   15d
+kube-system          pod/canal-wrxsq                                2/2     Running   2 (23m ago)   15d
+kube-system          pod/coredns-5c69dbb7bd-5rv7t                   1/1     Running   1 (23m ago)   15d
+sainamespace         pod/my-nginx-pod                               1/1     Running   0             4m
+
+
+controlplane $ kubectl get all -n kube-system 
+NAME                                           READY   STATUS    RESTARTS      AGE
+pod/calico-kube-controllers-75bdb5b75d-2b6mr   1/1     Running   1 (27m ago)   15d
+pod/canal-wrxsq                                2/2     Running   2 (27m ago)   15d
+pod/coredns-5c69dbb7bd-5rv7t                   1/1     Running   1 (27m ago)   15d
+
+
+NAME               TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE
+service/kube-dns   ClusterIP   10.96.0.10   <none>        53/UDP,53/TCP,9153/TCP   15d
+
+NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+daemonset.apps/canal        1         1         1       1            1           kubernetes.io/os=linux   15d
+daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   15d
+
+NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/calico-kube-controllers   1/1     1            1           15d
+deployment.apps/coredns                   2/2     2            2           15d
+
+NAME                                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/calico-kube-controllers-75bdb5b75d   1         1         1       15d
+replicaset.apps/coredns-5c69dbb7bd                   2         2         2       15d
+replicaset.apps/coredns-7db6d8ff4d                   0         0         0       15d
+controlplane $ kubectl get ns
+NAME                 STATUS   AGE
+default              Active   15d
+kube-node-lease      Active   15d
+kube-public          Active   15d
+kube-system          Active   15d
+local-path-storage   Active   15d
+sainamespace         Active   13m
+controlplane $ kubectl config set-context --current --namespace=default
+Context "kubernetes-admin@kubernetes" modified.
+controlplane $ kubectl get pods
+No resources found in default namespace.
+controlplane $ kubectl config set-context --current --namespace=sainamespace
+Context "kubernetes-admin@kubernetes" modified.
+
+controlplane $ kubectl get pods
+NAME           READY   STATUS    RESTARTS   AGE
+my-nginx-pod   1/1     Running   0          11m
+controlplane $ kubectl get pods -A
+NAMESPACE            NAME                                       READY   STATUS    RESTARTS      AGE
+kube-system          calico-kube-controllers-75bdb5b75d-2b6mr   1/1     Running   1 (35m ago)   15d
+kube-system          canal-wrxsq                                2/2     Running   2 (35m ago)   15d
+sainamespace         my-nginx-pod                               1/1     Running   0             16m
+controlplane $ 

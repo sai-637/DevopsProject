@@ -1,0 +1,178 @@
+kubectl get all --->to get all info about present ns
+
+kubectl get cluster-info --->to get info about cluster
+
+kubectl get nodes ---> available pods nodes
+
+kubectl get pods ---> available pods
+
+kubectl get pods --all-namespaces ---> availble pods in all ns
+
+k get pods --selector env=dev ---> to check how many pods exist in dev env 
+
+kubectl get pods webapp-daemonset-79m8x -o jsonpath='{.spec.containers[*].name}' ---->To get a container name inside a pod
+
+k get all --selector env=prod ---> To get all pods ,ns,replicasets in env=prod
+
+k get all --selector env=prod,bu=finance,tier=frontend  ----> POD which is part of the prod environment, the finance BU and of frontend tie
+
+kubectl describe pod podName ---> info about specific pod
+
+kubectl apply -f pod.yml ---> create pod
+
+kubectl delete pod podName ---> to delete a pod
+
+kubectl logs podName ---> to get logs about pod
+
+kubectl exec -it podName -- /bin/bash/ --->execute command inside a pod
+
+kubectl get deployments ---> get all deployments
+
+kubectl rollout status deployment/deploymentName --->rollback to previous version
+
+kubectl rollout undo deployment/deployment name ---> roll back to previous version of dep
+
+kubectl delete deployment deployment name
+
+kubectl get ns ---> availble namespaces
+
+kubectl create namespace namespacename
+
+kubectl get pods -n namespace name --->Run a command in specific namespace
+
+kubectl create configmap configmap-name --from-literal=key=value 
+
+kubectl create secrete generic secrete name --from-literal=key=value
+
+kubectl describe resourcetype resourcename --->info about resource
+
+kubectl logs podNmae
+
+kubectl logs podName -c containerName ---> logs in container in a pod
+
+kubectl get pv
+
+kubectlctl get pvc
+
+kubectl delete pv pv name
+
+
+kubectl run nginx --image=nginx123 --dry-run=client -o yaml ---directly it will create yaml file
+
+kubectl get roles -n namespace ---> get all roles in namespaces
+
+kubectl apply -f role.yml
+
+kubectl exec -it my-pod -- /bin/bash ---> very ueful command for troubleshooting
+
+kubectl scale rs replicasetName --replicas=5 --->update our pods to 5 pods in rs
+
+kubectl edit rs rsName ---> edit pods in yaml file
+
+kubectl create deployment my-deployment --image=nginx --replicas=3 --->create deployment by using imperative type
+
+kubectl set image deployment/my-deploy nginx=nginx:1.18-perl --record  ---> we can set or edit image in deplyments
+
+kubectl replace -f replicasset.yml 
+
+kubectl scale --replicas=6 -f replicaset.yml ---> to update replicas
+
+kubectlctl scale --replicas=6 replicasset my-app replicaset --->
+
+kubectl get pods --namespace=kube-system --> to see the pods in the another namespace
+
+kubectl create -f pod.yml --namespace=dev ---> create a namespace in another namespace
+
+kubectl config set-context --current --namespace=<namespace> ---> to switch to another namespace
+
+kubectl run redis --image=redis -n sainamespace ---> create a pod in sainamespace
+
+kubectl set image deployment nginx nginx=nginx:1.18
+
+kubectl scale deployment nginx --replicas=5
+
+kubectl expose deployment nginx --port 80
+
+kubectl taint nodes nodeName key=value:NoSchedule --->applied taint on a node
+
+kubectl taint node nodeName taint status in describe command to add finally -  -->untainted
+
+kubectl label node node01 coor=blue ---> labeled
+
+kubectl create deployment blue --image=nginx --replicas=3 ---> deployment created
+
+git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git --->used to download metric server from the git
+
+cd kubernetes-metrics-server ---> change dir to 
+
+kubectl create -f . ---> deploy metrics server by creating all the components downloaded
+
+kubectl top node  ---> metrics server to start gathering data.
+
+kubectl top node ---> used to see the metrics of node
+
+kubectl get pod  ---> used to see the metrics of pod
+
+kubectl create configmap \ configmapName --from-literal=key=value \ --from-literal=app_color=blue --->created by using literal
+
+kubectl create configmap my-config --from-file=path/to/configfile ---> created from a file
+
+kubectl create secret generic my-secret --from-literal=username=admin --from-literal=password='s3cr3t' ---> create a secret from a literal
+
+kubectl create secret generic my-secret --from-file=path/to/secretfile --> create a secrete from a file
+
+kubectl replace --force -f yaml file ---> to delete a pod and replace a new changes 
+
+k describe cm configmapName --> to see the info of a cm
+
+kubectl -n elastic-stack logs kibana --->by inspecting kibana logs
+
+kubectl drain nodeName --ignore-daemonsets --->Draining a node moves all the running pods to other nodes in the cluster, preparing the node for maintenance
+
+kubectl uncordon nodeName ---> The maintenance tasks have been completed. Configure the node node01 to be schedulable again,After upgrading and rebooting, bring the node back into service using the kubectl uncordon
+
+kubectl cordon nodeName --> Kubernetes is used to mark a node as unschedulable, meaning that no new pods can be scheduled on that node.
+
+kubeadm upgrade plan ---> to check latest stable version for upgrade
+
+sudo kubeadm upgrade apply version name ---> to apply the version
+
+kubectl describe pod etcd-controlplane  -n kube-system --->to check version of ETCD running on the cluster
+
+kubectl config get-clusters ---> to check no of clusters
+
+kubectl config use-context cluster1 ---> switched to cluster-1
+
+openssl genrsa -out tls.key 2048 --->to create private key
+
+openssl req -new -key tls.key -out tls.csr --->create certificate signing request(CSR)
+
+openssl x509 -req -in tls.csr -signkey tls.key -out tls.crt -days 365  --->self sign the certificate
+
+ip netns add Red ---> create network namespace
+
+ip netns ---> show netns
+
+netstat -npl | grep -i schedular  ---> to check schedular listening on which port
+
+ip address ---> network interface for cluser connecivity
+
+ip address show eth0--->MAC address of the interface on the controlplane,eth0 is the network interface
+
+ssh node01 ---> to change to another node
+
+ip address show type bridge ---> to check interface or bridge in this host
+
+ip route --->to check routes
+
+ip link ---> The ip link command in Kubernetes is typically used within the container or pod to view or  manage network interfaces.
+
+nslookup google.com ---> nslookup is a command-line tool used to query the Domain Name System (DNS) to obtain domain name or IP address mapping details
+
+dig --->dig (Domain Information Groper) is a powerful command-line tool for querying DNS servers and obtaining detailed information about domain name resolution
+
+
+
+
+
+

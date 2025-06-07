@@ -1,0 +1,67 @@
+In Kubernetes, Role-Based Access Control (RBAC) is a method of controlling access to cluster resources based on a user's identity and role. 
+It allows administrators to define roles and bind them to users or service accounts, granting specific permissions and privileges. 
+RBAC provides a way to manage fine-grained access control within the cluster, ensuring that users only have access to resources and actions they need to perform their tasks.
+RBAC can be used to enforce policies, monitor activity, and maintain the overall security and integrity of the cluster.
+Role-based access control (RBAC) is a method of protecting sensitive data from improper access, modification, addition, or deletion. 
+It allows employees to have access to the information required to fulfill their responsibilities.
+Role-based access control (RBAC) objects determine whether a user is allowed to perform a given action within a project. 
+Cluster administrators can use the cluster roles and bindings to control who has various access levels to the OpenShift Container Platform platform itself and all projects.
+####################
+
+Role:
+###############
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+#####################################
+API group with an empty string ("") refers to the core API.
+Resources in the core API include:
+pods
+services
+nodes
+configmaps
+namespaces
+
+Named API Groups:
+
+Non-core resources are part of named API groups.
+Named groups help modularize Kubernetes by separating features into logical domains.
+Example API groups include:
+apps (e.g., Deployments, StatefulSets)
+rbac.authorization.k8s.io (e.g., Roles, RoleBindings)
+batch (e.g., Jobs, CronJobs)
+
+########################
+The next step is to link the user to that role.
+For this we create another object called RoleBinding. This role binding object links a user object to a role.
+Bind The Role to the user:
+#######################
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods-binding
+  namespace: default
+subjects:
+- kind: User
+  name: "jane"  # This is the user to whom you're giving permissions
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+
+############################
+View RBAC:
+
+To list roles
+ kubectl get roles
+To list rolebindings
+kubectl get rolebindings
+kubectl describe rolebinding read-podsbinding --->describe the role binding
+

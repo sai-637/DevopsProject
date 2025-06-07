@@ -1,0 +1,120 @@
+Initialising Kubernetes... done
+
+controlplane $ vi pv.yml
+controlplane $ kubectl create -f pv.yml
+persistentvolume/example-pv created
+controlplane $ kubectl get pv
+NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+example-pv   5Gi        RWO            Retain           Available                          <unset>                          6s
+controlplane $ vi pvc.yml
+controlplane $ kubectl create -f pvc.yml
+persistentvolumeclaim/example-pvc created
+controlplane $ kubectl get pvc
+NAME          STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+example-pvc   Pending                                      local-path     <unset>                 10s
+controlplane $ kubectl get pv
+NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+example-pv   5Gi        RWO            Retain           Available                          <unset>                          2m33s
+controlplane $ vi pvc.yml
+
+
+
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: "/mnt/data"
+
+capacity: Specifies the size of the storage, in this case, 10Gi.
+accessModes: Defines how the volume can be accessed. ReadWriteOnce means it can be mounted as read-write by a single node.
+persistentVolumeReclaimPolicy: Determines what happens to the PV when the PVC is deleted.
+Retain means the data is retained after the PVC is deleted.
+storageClassName: Associates the PV with a storage class. If you don’t want to use storage classes, you can omit this or set it to "manual".
+hostPath: Defines the actual storage location on the host machine for testing purposes.
+In production, you might use other storage types like NFS, AWS EBS, GCE PD, etc.
+
+
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+Use the PVC in a Pod
+Once the PVC is bound to a PV, you can use the PVC in a pod to mount the storage.
+
+#######################################################
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-container
+    image: nginx
+    volumeMounts:
+    - mountPath: /usr/share/nginx/html
+      name: my-storage
+  volumes:
+  - name: my-storage
+    persistentVolumeClaim:
+      claimName: my-pvc
+
+
+
+accessModes: Should match one of the access modes specified in the PV.
+resources: Specifies the amount of storage requested. This should be equal to or less than the capacity of the PV.
+storageClassName: This should match the storageClassName defined in the PV.
+If storageClassName is not specified, it will bind to a PV without a storage class or to the default storage class.
+
+#####################################################################
+
+pv in kubernetes
+
+PV stands for Persistent Volumes in Kubernetes. 
+It is a resource that provides persistent storage to pods.
+PVs are managed by the cluster and are decoupled from pods, ensuring that when a pod is deleted or recreated, the data stored in the PV is preserved.
+PVs can be provisioned statically by cluster administrators or dynamically through storage classes.
+They can be attached to pods using Persistent Volume Claims (PVCs) and can be used for storing applications' data, logs, or other persistent data.
+
+pvc in kubernetes
+
+PVC (Persistent Volumes Claim) is a Kubernetes feature that allows you to request storage resources from a cluster.
+A PVC is a request for storage that is provisioned and managed by a cluster administrator. 
+Once a PVC is created, it can be bound to a Persistent Volume (PV), which is a resource in the cluster 
+that represents a piece of networked storage. PVCs provide a way to decouple storage from the deployment of an application, 
+allowing for more flexibility and scalability in the deployment of stateful applications.
+
+PVs can be provisioned through the statically or dynamically.
+static provisioning involves creating PVs in advance,
+while dynamic provisioning allows Pvs to be created on-demand when requested by the application.
+
+Dynamic Provisioning of PVs facilitated through the use of storage classes
+
+when pvc created,kubernetes dynamically binds it to an available pv that matches the requirements specified in the claim
+
+
+storage class in kubernetes
+
+In Kubernetes, a storage class is a way to request storage with specific characteristics, such as type and size, without explicitly specifying the underlying Persistent Volumes (PVs).
+When a Pod requests storage, Kubernetes creates a Persistent Volume Claim (PVC) and binds it to a matching PV.
+This decouples the application from the storage infrastructure, allowing for easier scaling and flexibility. 
+Storage classes can be used to provision storage from various sources, such as local disks, NFS, or object storage like Amazon S3. 
+They provide a standardized way to interact with storage resources in Kubernetes.

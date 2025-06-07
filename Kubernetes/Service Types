@@ -1,0 +1,211 @@
+There are 5 types of services:
+ClusterIP
+NodePort
+LoadBalancer
+External Name
+Headless
+
+ClusterIP:
+
+ClusterIP is the default service type in Kubernetes. 
+It exposes the service on an internal IP address within the Kubernetes cluster, making it accessible only from within the cluster.
+This is useful for internal services that do not need to be exposed to external traffic.
+
+How ClusterIP Works
+When you create a ClusterIP service, Kubernetes allocates an IP address for the service within the cluster. 
+This IP is only reachable from within the cluster, and the service routes traffic to the pods that match the service's selector.
+
+Pod yaml file:
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.21
+    ports:
+    - containerPort: 80
+
+############################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: nginx  # Label selector to find the pods this service will expose
+  ports:
+    - protocol: TCP
+      port: 80        # Port to access the service
+      targetPort: 8080  # Port on the pod that the service will forward traffic to
+  type: ClusterIP  # The type of service (defaults to ClusterIP)
+
+####################################################
+NodePort:
+
+In Kubernetes, a NodePort is a type of service that exposes a container's port on each machine (node) in a cluster. 
+It allows external traffic to access the service directly by using a static port number on each node. 
+NodePorts are typically used for development environments, testing, and demos. When a NodePort is created,
+Kubernetes allocates a unique port number on each node's exposed ports (30000-32767) and maps it to the container's port.
+This allows clients to access the service using the node's IP and the allocated port number.
+
+A NodePort is a type of service in Kubernetes that exposes your application on a specific port on each node in your cluster. 
+This allows external traffic to access your application by using the IP address of any node in the cluster along with the specified port.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nodeport-service
+spec:
+  type: NodePort
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      nodePort: 30007
+
+#####################################################
+Load Balancer:
+
+A LoadBalancer service in Kubernetes is used to expose a service to external traffic by provisioning a load balancer provided by the underlying cloud infrastructure (like AWS, Google Cloud, Azure, etc.).
+This type of service automatically distributes incoming traffic across multiple pods and ensures high availability and fault tolerance for your application.
+
+How LoadBalancer Works
+When you create a LoadBalancer service, Kubernetes requests a cloud provider to provision an external load balancer. 
+The load balancer receives incoming traffic and forwards it to the backend pods associated with the service.
+
+External Load Balancer:
+
+Typically provisioned by a cloud provider.
+Distributes traffic from external clients (e.g., the internet) to services running within the Kubernetes cluster.
+Example: AWS Elastic Load Balancer (ELB), Google Cloud Load Balancer, Azure Load Balancer.
+
+Internal Load Balancer:
+
+Distributes traffic within a private network or between services inside a cluster.
+Often used for communication between microservices.
+
+It automatically provisions an external load balancer when you create a Service of type LoadBalancer.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-api-deployment
+  labels:
+    app: my-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-api
+  template:
+    metadata:
+      labels:
+        app: my-api
+    spec:
+      containers:
+      - name: my-api-container
+        image: my-api-image:latest
+        ports:
+        - containerPort: 80
+      
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-api-loadbalancer-service
+spec:
+  selector:
+    app: my-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+
+
+An external load balancer is created.
+It forwards traffic from port 80 of the load balancer to port 8080 on the Pods matching the selector app: my-app.
+
+#######################################################################
+External Name:
+
+Description: Maps a Service to an external DNS name.
+Use Case: For redirecting traffic to services outside the Kubernetes cluster.
+Access: Resolves to the specified external DNS name.
+Example:
+yaml
+Copy code
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-externalname-service
+spec:
+  type: ExternalName
+  externalName: example.com
+
+Does not define a Pod selector.
+Useful for integrating with external databases or third-party services.
+
+#####################################################################
+Headless Service:
+
+A Headless Service in Kubernetes is a specialized type of Service that does not assign a ClusterIP. 
+Instead, it provides direct access to the individual Pods associated with it. 
+This is typically used for stateful applications or scenarios where you need Pods to be accessed directly by their DNS names or IP addresses.
+
+Statefulset yaml file:
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-app
+spec:
+  serviceName: my-headless-service
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-container
+        image: my-app-image
+        ports:
+        - containerPort: 8080
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-headless-service
+  labels:
+    app: my-app
+spec:
+  clusterIP: None
+  selector:
+    app: my-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+
+For applications where each instance (Pod) must be uniquely addressable, such as databases or message brokers.
+Commonly paired with StatefulSets to manage stateful applications, like databases (e.g., Cassandra, MySQL, Elasticsearch), where each Pod has a unique identity.
+Unlike standard Services, Kubernetes does not use kube-proxy to route traffic for a Headless Service.
+Unlike regular Services, a Headless Service does not load-balance requests across Pods.
+Instead, it provides direct DNS resolution to the Pods behind it.
+You specify clusterIP: None in the Service definition to create a Headless Service.
+Each Pod in a Headless Service gets its own unique DNS record.
+################################################################################################################
