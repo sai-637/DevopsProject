@@ -46,7 +46,6 @@ WHERE department = 'IT';
 
 INSERT INTO software_employee VALUES ('3','najana','bhavani','84666901727','system engineer','software','40000','Vizag');
 
-
 DELETE FROM software_employee WHERE phone_number='5556667777';
 
 

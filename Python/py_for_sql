@@ -256,7 +256,7 @@ def install_dependencies():
         log_message(f"❌ Error during dependency installation: {e}")
         sys.exit(1)
 
-# Install dependencies
+#Install dependencies
 install_dependencies()
 
 try:

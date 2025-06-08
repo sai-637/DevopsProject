@@ -50,7 +50,7 @@ Manages deduplication, grouping, and sending notifications.
 4.Pushgateway:
 Allows ephemeral or batch jobs to expose metrics by pushing them to Prometheus.
 
-##################################################################################################################
+#################################################################################################################
 Prometheus Workflow (Brief Overview)
 Prometheus follows a systematic process to collect, store, query, and alert on metrics data. Here's a concise explanation:
 

@@ -14,7 +14,7 @@ Jenkins will continue to check source code repository for any changes make in so
 
 how do you take backup of the jenkins server
 
-To take a backup of a Jenkins server, you can use the following methods:
+To take a backup of a Jenkins server,you can use the following methods:
 
 Jenkins Backup Plugin: Install the Jenkins Backup Plugin on your server, which allows you to schedule automatic backups of your Jenkins configuration, jobs, and other data.
 Export Jenkins Configuration: Use the Jenkins CLI (Command-Line Interface) to export your Jenkins configuration as a file using the jenkins export command.

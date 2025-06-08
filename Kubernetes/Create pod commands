@@ -37,9 +37,6 @@ all info,syntax of pods
 kubectl explain pods --recursive
 
 
-
-
-
 Create Deployment pod:
 vi deploy.yml
 
