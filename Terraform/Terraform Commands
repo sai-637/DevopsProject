@@ -13,7 +13,7 @@ Does not interact with infrastructure or state.
 terraform validate
 terraform plan
 
-Creates an execution plan, showing the changes Terraform will make to your infrastructure.
+Creates an execution plan, showing the changes Terraform will make to your infrastructure..
 A safe "dry-run" to review before applying changes.
 
 terraform plan
