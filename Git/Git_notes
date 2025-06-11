@@ -9,7 +9,7 @@ Git is available on multiple platforms and is often used in conjunction with oth
 HEAD
 ########################################################################################################################
 #######################################################################################################################
-5cabc73 (Add files via upload)
+
 reflog 
 
 The git reflog command is a powerful tool in Git that displays a record of all commits, including changes to branches and remote references.
