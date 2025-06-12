@@ -10,6 +10,6 @@ CloudTrail provides visibility into user activity by recording actions taken on 
 CloudTrail records important information about each action, including who made the request, the services used, 
 the actions performed, parameters for the actions, and the response elements returned by the AWS service.
 
-##########################################################
+###########################################################
 CloudWatch monitors applications and infrastructure performance in the AWS environment. 
 CloudTrail monitors actions in the AWS environment.
