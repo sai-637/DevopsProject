@@ -15,7 +15,7 @@ helm create my-app
 cd my-app
 
 Define Deployment and Service: Update the templates/deployment.yaml and templates/service.yaml to define your application.
-#########################
+######################################################################
 # templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
