@@ -156,3 +156,114 @@ Use Grafana for better visualization and dashboards.
 Regularly validate the /metrics endpoint to ensure it exposes meaningful metrics for monitoring.
 
 ########################################################
+
+Install FastAPI and Prometheus Client
+
+sudo apt update -y
+sudo apt install -y python3-pip
+pip3 install fastapi uvicorn prometheus-client
+✅ 2. Create FastAPI App with Prometheus Metrics
+Create a file named main.py:
+
+from fastapi import FastAPI
+from prometheus_client import Counter, generate_latest
+from fastapi.responses import Response
+
+app = FastAPI()
+
+REQUEST_COUNT = Counter("request_count", "Total number of requests")
+
+@app.get("/")
+def read_root():
+    REQUEST_COUNT.inc()
+    return {"message": "Hello, World"}
+
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type="text/plain")
+✅ 3. Run the App on Port 8000
+
+uvicorn main:app --host 0.0.0.0 --port 8000
+or
+python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+✅ 4. Configure Prometheus to Scrape FastAPI Metrics
+Edit Prometheus config:
+
+
+sudo vim /etc/prometheus/prometheus.yml
+Add this job under scrape_configs:
+
+
+  - job_name: 'ml_model'
+    static_configs:
+      - targets: ['localhost:8000']
+Make sure indentation is correct. This goes under scrape_configs: list.
+
+Example:
+
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'ml_model'
+    static_configs:
+      - targets: ['localhost:8000']
+✅ 5. Restart Prometheus
+
+sudo systemctl restart prometheus
+✅ 6. Verify Setup
+Go to http://localhost:8000/metrics → should return Prometheus-formatted metrics.
+
+Open Prometheus at http://localhost:9090 and search for the metric request_count.
+
+
+✅ Step-by-Step: Add Prometheus to Grafana
+🔹 1. Install Grafana (if not already installed)
+
+sudo apt update -y
+sudo apt install -y software-properties-common
+sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+sudo apt update -y
+sudo apt install -y grafana
+sudo systemctl enable --now grafana-server
+Access Grafana: http://localhost:3000
+
+Default login
+
+Username: admin
+
+Password: admin (will prompt to change)
+
+🔹 2. Add Prometheus as a Data Source
+Open Grafana in browser → http://localhost:3000
+
+Go to Settings (Gear icon) > Data Sources
+
+Click Add Data Source
+
+Choose Prometheus
+
+In the HTTP URL, enter:
+
+
+http://localhost:9090
+Click Save & Test → It should say "Data source is working"
+
+🔹 3. Create a Dashboard with Prometheus Metrics
+Go to Dashboards > New Dashboard
+
+Click Add a new panel
+
+In the Query box, use your metric:
+
+
+request_count
+Adjust visualization type (e.g., Time series or Stat panel)
+
+Click Apply to save the panel
+
+Save the dashboard with a name like "ML Model Monitoring"
+########################################
