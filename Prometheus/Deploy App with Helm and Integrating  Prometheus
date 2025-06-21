@@ -163,7 +163,7 @@ sudo apt update -y
 sudo apt install -y python3-pip
 pip3 install fastapi uvicorn prometheus-client
 ✅ 2. Create FastAPI App with Prometheus Metrics
-Create a file named main.py:
+Create a file named myapp.py:
 
 from fastapi import FastAPI
 from prometheus_client import Counter, generate_latest
@@ -185,7 +185,7 @@ def metrics():
 
 uvicorn main:app --host 0.0.0.0 --port 8000
 or
-python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+python3 -m uvicorn myapp:app --host 0.0.0.0 --port 8000
 ✅ 4. Configure Prometheus to Scrape FastAPI Metrics
 Edit Prometheus config:
 
@@ -194,22 +194,10 @@ sudo vim /etc/prometheus/prometheus.yml
 Add this job under scrape_configs:
 
 
-  - job_name: 'ml_model'
+  - job_name: 'my_app'
     static_configs:
       - targets: ['localhost:8000']
-Make sure indentation is correct. This goes under scrape_configs: list.
 
-Example:
-
-
-scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
-
-  - job_name: 'ml_model'
-    static_configs:
-      - targets: ['localhost:8000']
 ✅ 5. Restart Prometheus
 
 sudo systemctl restart prometheus
@@ -267,3 +255,158 @@ Click Apply to save the panel
 
 Save the dashboard with a name like "ML Model Monitoring"
 ########################################
+
+Step-by-Step: Add Rules and Configure Alertmanager
+Write an Alerting Rule in Prometheus
+first install alertmanager
+
+cd /opt
+sudo wget https://github.com/prometheus/alertmanager/releases/download/v0.27.0/alertmanager-0.27.0.linux-amd64.tar.gz
+
+sudo tar -xzf alertmanager-0.27.0.linux-amd64.tar.gz
+
+sudo mv alertmanager-0.27.0.linux-amd64 alertmanager
+cd alertmanager
+sudo cp alertmanager /usr/local/bin/
+sudo cp amtool /usr/local/bin/
+
+###########################################################
+Cluster-monitoring
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stress-pod
+  labels:
+    app: stress
+spec:
+  containers:
+    - name: stress
+      image: polinux/stress
+      args:
+        - /bin/sh
+        - -c
+        - "stress --cpu 4 --vm 2 --vm-bytes 512M --timeout 600s && sleep 3600"
+      resources:
+        requests:
+          cpu: "250m"
+          memory: "256Mi"
+        limits:
+          cpu: "500m"
+          memory: "512Mi"
+		  
+ k apply -f stress-pod.yaml
+ k get pods
+		  
+#######################################################################
+vi stress-alerts.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: stress-pod-alerts
+  namespace: default  # Change if your Prometheus runs in another namespace
+  labels:
+    release: prometheus-stack  # This must match your Helm release name prefix
+spec:
+  groups:
+    - name: stress-pod-alerts
+      rules:
+        - alert: HighCPUUsage
+          expr: rate(container_cpu_usage_seconds_total{pod="stress-pod"}[1m]) > 0.4
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High CPU usage on {{ $labels.pod }}"
+            description: "CPU usage > 400m for more than 1 minute on pod {{ $labels.pod }}."
+
+        - alert: HighMemoryUsage
+          expr: container_memory_usage_bytes{pod="stress-pod"} > 300 * 1024 * 1024
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High Memory usage on {{ $labels.pod }}"
+            description: "Memory usage > 300MiB for more than 1 minute on pod {{ $labels.pod }}."
+
+k apply -f stress-alerts.yaml
+k get prometheusrules
+
+then go to after 3 minutes to prometheus alerts you will see
+
+Add Prometheus as a Data Source (if not already)
+Go to:
+
+Gear Icon (⚙️) → Data Sources
+
+Select or configure Prometheus with URL:
+
+arduino
+Copy
+Edit
+http://prometheus-stack-kube-prom-prometheus.default.svc:9090
+Click Save & Test
+
+🔹 4. Create a New Dashboard to Visualize Alerts
+Go to Dashboards → New → Add new panel
+
+In the Query editor, select:
+
+bash
+Copy
+Edit
+Data source: Prometheus
+Query: ALERTS{alertname="HighCPUUsage"}
+Or if you want to see both alerts:
+
+arduino
+Copy
+Edit
+ALERTS{alertname=~"High.*Usage"}
+Set Legend as {{ alertname }} or {{ pod }}
+
+Choose Visualization: Table or Stat panel
+
+Click Apply
+
+###############################################
+
+Step-by-Step: View Alert Message in Grafana
+1. Go to Grafana → Dashboards → New → Add Panel
+2. Set Prometheus Query
+In the query section, set:
+
+promql
+Copy
+Edit
+ALERTS{alertname=~"HighCPUUsage|HighMemoryUsage"}
+This fetches alerts currently in pending or firing state for your stress pod.
+
+3. Change Visualization to "Table"
+In the panel editor, on the right side, change Visualization from "Time series" to "Table"
+
+4. Add Alert Message as Columns
+To see the description, severity, alertname, pod, state, follow this:
+
+Click on the "Transform" tab.
+
+Add a “Labels to Fields” transformation:
+
+Click "Add transformation" → "Labels to Fields"
+
+Optionally, also add:
+
+“Organize fields” transformation to show only fields like:
+
+alertname
+
+severity
+
+pod
+
+state (firing, pending)
+
+description (from annotation, requires additional steps)
+
+######################################################################
+
