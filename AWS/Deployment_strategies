@@ -1,0 +1,153 @@
+ 1. Rolling Deployment
+📌 Description:
+Gradually replaces old instances with new ones in batches.
+
+✅ Pros:
+Minimal downtime.
+
+Easy rollback by stopping rollout.
+
+❌ Cons:
+Some users may hit old version during transition.
+
+✅ Best Used For:
+Non-critical systems or minor updates.
+############################################################
+Terraform configuration uses a Rolling Deployment Strategy, enabled via the instance_refresh block in the Auto Scaling Group.
+instance_refresh {
+  strategy = "Rolling"
+  preferences {
+    min_healthy_percentage = 50
+    instance_warmup        = 30
+  }
+  triggers = ["launch_template"]
+}
+📌 What this means:
+When you update the Launch Template (e.g., new AMI or configuration change), Terraform triggers a rolling replacement of instances.
+Only a portion of instances (50% or more) are replaced at a time, ensuring continuous availability.
+Each new instance waits 30 seconds (warmup) before being considered healthy.
+This prevents downtime or full-scale replacement.
+
+✅ Benefits of This Rolling Strategy:
+Zero downtime deployments.
+Ensures at least half the instances are always healthy during an update.
+Works well for stateless applications like FastAPI behind a load balancer.
+##############################################################################
+2.Blue-Green-Deployment
+
+Run two environments — Blue (current) and Green (new). Switch traffic to Green after validation.
+It’s a zero-downtime release technique where:
+Blue = currently running, stable version of your application.
+Green = new version, deployed in parallel for testing and validation.
+Once Green is verified, traffic is switched from Blue → Green (often by updating a load balancer).
+
+Blue-Green Deployment is a technique for releasing applications with zero downtime.
+
+It uses two identical environments: Blue (live) and Green (new).
+
+The Blue environment serves current production traffic.
+
+The Green environment hosts the new application version for testing.
+
+Once Green passes validation, traffic is switched from Blue to Green (via load balancer).
+
+If issues occur, traffic can quickly roll back to Blue.
+
+It ensures users never experience downtime or broken features.
+
+This method is ideal for stateless web applications and APIs.
+
+It requires more resources, as both environments run simultaneously.
+
+Blue-Green enhances deployment safety, speed, and rollback capability.
+
+Advantages of Blue-Green Deployment
+Advantage	Description
+✅ Zero Downtime	You deploy the new version (Green) alongside the current one (Blue). Traffic is only switched once everything is verified, avoiding user impact.
+✅ Easy Rollback	If Green has issues, you can switch back to Blue quickly by pointing the load balancer back. No need to redeploy.
+✅ Safe Testing in Production	You can test the Green version in a live environment using a subset of traffic or internal endpoints.
+✅ Instant Switch-over	Changing the ALB listener to point to Green takes seconds—unlike traditional re-deployments.
+✅ Isolated Environments	Green and Blue run in separate EC2 ASGs, avoiding shared-state or config problems.
+
+Disadvantages of Blue-Green Deployment
+Disadvantage	Description
+❌ Higher Infrastructure Cost	You run two full environments (Blue and Green) at once, doubling compute and resource usage.
+❌ Complex Infrastructure Management	You need logic to keep both environments synced in networking, IAM, SGs, monitoring, etc.
+❌ Manual Traffic Switching (if not automated)	Without a CI/CD pipeline or automation, the traffic switch can be error-prone or forgotten.
+❌ Database Complications	If your app includes a schema change or stateful DB update, you must coordinate carefully (e.g., make DB backward-compatible or use feature flags).
+
+###############################################################################################
+Canary-deployment
+
+Canary Deployment is a progressive rollout strategy used in software deployment where a 
+new version of an application is released to a small subset of users first,
+while the majority of users continue using the old version.
+
+
+How it works:
+Deploy v1 (stable version) to 100% of users.
+
+Deploy v2 (new version) to a small % of users — e.g., 10–20%.
+
+Monitor v2 for errors, latency, user experience.
+
+If everything is stable:
+
+Increase traffic to v2 gradually (50%, then 100%).
+
+Eventually retire v1.
+
+If issues are detected:
+
+Instantly roll back and stop v2.
+
+Keep users on v1.
+
+provider: Configures the AWS region dynamically using a variable.
+
+aws_vpc (data): Fetches the default VPC in your selected region.
+
+aws_subnets (data): Retrieves all subnets within that default VPC.
+
+aws_ami: Looks up the latest official Ubuntu 20.04 AMI from Canonical.
+
+aws_security_group: Creates a security group allowing HTTP (port 80) from anywhere.
+
+aws_launch_template.v1: Defines how version 1 EC2 instances are launched (AMI, type, user data).
+
+aws_launch_template.v2: Similar to v1 but for version 2, used in canary testing.
+
+aws_lb_target_group.v1: Creates a target group for routing traffic to version 1 instances.
+
+aws_lb_target_group.v2: Another target group, used for version 2 instances.
+
+aws_autoscaling_group.v1: Launches and manages EC2 instances for version 1, linked to tg-v1.
+
+aws_autoscaling_group.v2: Launches version 2 instances with a lower capacity (canary).
+
+aws_lb: Creates a public Application Load Balancer to route HTTP traffic.
+
+aws_lb_listener: Listens on port 80 and forwards traffic to v1 by default.
+
+aws_lb_listener_rule: Overrides the default action to split traffic — 80% to v1, 20% to v2.
+
+Path pattern /: This rule applies to all incoming URLs, enabling global traffic splitting.
+
+
+
+
+✅ Benefits:
+Advantage	Description
+🧪 Safe Testing	Tests new features on real users without full exposure.
+🔁 Easy Rollback	If something goes wrong, traffic is quickly reverted.
+📊 Metric-based Control	Decisions can be based on monitoring (CPU, errors, etc).
+📈 Supports CI/CD	Enables fast and controlled deployments in pipelines.
+
+❌ Risks / Limitations:
+Needs strong monitoring and alerting.
+
+Complex traffic routing setup (ALB, weights).
+
+Data inconsistencies if versions handle DBs differently.
+
+Not ideal for apps that must be deployed uniformly (e.g., real-time multiplayer)

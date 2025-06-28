@@ -296,6 +296,17 @@ spec:
 		  
  k apply -f stress-pod.yaml
  k get pods
+ #########################################################################
+ if you want to increase memory pressure
+ 
+ Increase Memory Limit in YAML
+Let the container use more memory so it actually gets enough for stress to trigger OOM:
+resources:
+  limits:
+    memory: 1Gi
+Then run:
+stress --vm 1 --vm-bytes 900M
+This will fit within the limit, but if you push over (--vm-bytes 1100M), it will exceed and cause OOM.
 		  
 #######################################################################
 vi stress-alerts.yaml
