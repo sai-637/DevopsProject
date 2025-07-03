@@ -312,3 +312,72 @@ print(amount_15)
 print(si_5)
 print(amount_15_simple)
 #######################################################################
+1.Write a function:
+def solution(A)
+that, given an array A of N integers, returns the smallest positive integer (greater than 0) that does not occur in A.
+For example, given A = [1, 3, 6, 4, 1, 2], the function should return 5.
+Given A = [1, 2, 3], the function should return 4.
+Given A = [−1, −3], the function should return 1.
+
+def fun(A):
+  small=1
+  while small in A:
+    small+=1
+  return small
+print(fun([1,3,6,4,1,2]))
+print(fun([1,2,3]))
+print(fun([-1,-3]))
+######################################################################
+2.Missing Element in a Sequence
+A zero-indexed array A of length N−1 contains all integers from 1 to N except one. Find the missing number.
+
+def fun(A):
+  N=len(A)+1
+  total_sum=N*(N+1)//2
+  actual_sum=sum(A)
+  return total_sum-actual_sum
+print(fun([1,4,5,3]))
+print(fun([1,2,6,4,3]))
+###################################################################
+3.: Count Distinct Values
+Write a function that returns the number of distinct values in array A.
+
+def count_distinct(A):
+  distinct_values=set(A)
+  return len(distinct_values)
+print(count_distinct([1,2,1,2,3,4,4]))
+
+def count_distinct(A):
+  distinct_values=[]
+  for num in A:
+    if num not in distinct_values:
+      distinct_values.append(num)
+  return len(distinct_values)
+print(count_distinct([1,2,2,3,1,4]))
+
+#####################################################################
+4.Maximum Product of Three Numbers
+Given an array of integers A, return the maximum product that can be obtained from any triplet of numbers.
+
+def max_product_three(A):
+  A.sort()
+  return max(A[-1]*A[-2]*A[-3],A[0]*A[1]*A[-1])
+print(max_product_three([-10, -10, 1, 2, 3]))
+#####################################################################
+5.Permutation Check
+Check if array A is a permutation of numbers from 1 to N.
+
+def permutation(A):
+  N=len(A)
+  return set(A) == set(range(1,N+1))
+print(permutation([1,2,4,3]))
+print(permutation([91,3,4]))
+#########################################################################
+6.Replace All Negative Numbers
+Replace all negative values in the following array with 0:
+
+import numpy as np
+arr=np.array([-3,1,8,-7,-3])
+arr[arr < 0]=0
+print(arr)
+######################################################################

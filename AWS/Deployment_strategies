@@ -151,3 +151,23 @@ Complex traffic routing setup (ALB, weights).
 Data inconsistencies if versions handle DBs differently.
 
 Not ideal for apps that must be deployed uniformly (e.g., real-time multiplayer)
+
+Output the private key to a local file
+After terraform apply, run:
+
+terraform output -raw private_key_pem > my-key.pem
+chmod 400 my-key.pem
+This will:
+
+Create a file my-key.pem in your current directory.
+
+This file is your private SSH key.
+
+✅ Step 2: Set correct permissions (important for SSH)
+chmod 400 my-key.pem
+✅ Step 3: (Optional) Convert .pem to .ppk for PuTTY
+If you're using Windows + PuTTY:
+Open PuTTYgen.
+Click Load, select my-key.pem.
+Click Save private key → Save as my-key.ppk.
+
