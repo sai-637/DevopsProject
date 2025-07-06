@@ -380,4 +380,88 @@ import numpy as np
 arr=np.array([-3,1,8,-7,-3])
 arr[arr < 0]=0
 print(arr)
+####################################################################
+7.Check given integer is prime number or  not ouput should true or false
+
+def solution(A):
+    if A > 1:
+        for i in range(2, int(A ** 0.5) + 1):
+            if A % i == 0:
+                return False
+        return True
+    else:
+        return False
+###############################################################
+8.
+cpu_usages = np.array([45.6, 48.2, 42.3, 50.1])
+mean = np.mean(cpu_usages)
+maximum=np.max(cpu_usages)
+minimum=np.min(cpu_usages)
+print(mean)
+print(maximum)
+print(minimum)
+##########################################################
+9.First Duplicate in a list
+def first_duplicate(A):
+  B=set()
+  for num in A:
+    if num in B:
+      return num
+    B.add(num)
+  return -1
+print(first_duplicate([1,3,2,1]))
+print(first_duplicate([3,2,1]))
+################################################################
+10.convert two lists into dict
+names=["sai","suresh","ramesh"]
+ages=[23,24,25]
+dict1={}
+for i in range(len(names)):
+  key=names[i]
+  values=ages[i]
+  dict1[key]=values
+print(dict1)
+#########################################################
+11.Anagram check
+def function(S,T):
+  return sorted(S) == sorted(T)
+print(function("listen","netlis"))
+############################################################
+12.count words in sentance
+
+def function(S):
+  words=S.split()
+  return len(words)
+S="my name is sai"
+print(function(S))
+#################################################################
+13.factorial of a number
+def factorial(N):
+  if N==0 or N==1:
+    return 1
+  else:
+    return N *factorial(N-1)
+N=5
+print(factorial(N))
+print(factorial(10))
+#################################################################
+14.fibonacci series range
+def fibonacci(N):
+    a,b=0,1
+    for _ in range(N):
+      print(a,end=" ")
+      a,b=b,a+b
+fibonacci(10)
+####################################################################
+15.prime numbers range
+l=2
+u=101
+def prime_range():
+  for num in range(l,u+1):
+    for i in range(2,int(num ** 0.5)+1):
+      if num%i==0:
+        break
+    else:
+      print(num,end=" ")
+prime_range()
 ######################################################################
