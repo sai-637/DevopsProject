@@ -465,3 +465,78 @@ def prime_range():
       print(num,end=" ")
 prime_range()
 ######################################################################
+16.Generate random CPU usage and flag high spikes (above 90%).
+import numpy as np
+
+cpu = np.random.randint(30, 100, size=10)
+spikes = cpu[cpu > 90]
+print("CPU Usage:", cpu)
+print("Spikes Detected:", spikes)
+####################################################################
+17.Load a CSV with server logs and filter only error rows.
+import pandas as pd
+
+df = pd.DataFrame({
+    'timestamp': ['2025-07-01', '2025-07-01', '2025-07-02'],
+    'status': ['INFO', 'ERROR', 'ERROR'],
+    'message': ['Started', 'Connection failed', 'Disk full']
+})
+
+error_logs = df[df['status'] == 'ERROR']
+print(error_logs)
+################################################################
+18.Dict to List convert
+dic={"name":"sanju","age":23}
+res=list(dic.items())
+print(res)
+############################################################
+19.Armstrong number check
+n=153
+toStr=str(n)
+sum=0
+for i in toStr:
+  sum=sum+int(i)**3
+if n==sum:
+    print("Armstrong number")
+else:
+    print("Not a Arrmstrong Number")
+###########################################################
+20. Given deployment timestamps, calculate how many deployments happened per day.
+import pandas as pd
+
+data = {
+    'deployment_time': ['2025-07-01 10:00', '2025-07-01 15:00', '2025-07-02 11:00']
+}
+df = pd.DataFrame(data)
+df['date'] = pd.to_datetime(df['deployment_time']).dt.date
+count_per_day = df.groupby('date').size()
+print(count_per_day)
+
+use:How many deployments were made per day.
+#################################################################
+21.Identify days with average disk usage over 85%.
+import pandas as pd
+df=pd.DataFrame({
+    'date':['2025-07-01', '2025-07-01', '2025-07-02'],
+    'usage':[86,89,45]
+})
+grouped=df.groupby('date')['usage'].mean()
+high_usage_days=grouped[grouped > 85]
+print(high_usage_days)
+
+This is useful in monitoring tools or performance analytics:
+Identify dates when average system resource usage crossed a critical threshold (e.g., 85%).
+
+#########################################################################
+22.Filter logs by ERROR level and save to CSV.
+df = pd.DataFrame({
+    'level': ['INFO', 'ERROR', 'WARNING', 'ERROR'],
+    'msg': ['ok', 'disk fail', 'retrying', 'db error']
+})
+errors = df[df['level'] == 'ERROR']
+errors.to_csv('errors.csv', index=False)
+print("Exported error logs.")
+
+Automatically filter error logs from a mixed log file.
+Export errors for further review, alerting, or sharing.
+#####################################################################
